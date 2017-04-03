@@ -83,7 +83,11 @@ class Generator
 
     protected static function monty()
     {
-        return MontyGenerator::create(18, 0, 2);
+        $dice = BestDice::create()
+          ->sides(6)
+          ->number(1)
+          ->modifier(12);
+        return BestRollsOrderedGenerator::create($dice, 8);
     }
 
     protected static function random()
