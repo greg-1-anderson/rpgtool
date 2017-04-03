@@ -24,6 +24,8 @@ class Archetypes
                 Attribute::DEXTERITY,
             ],
             [
+                Attribute::CHARISMA,
+                Attribute::WISDOM,
                 Attribute::INTELLIGENCE,
             ]
         );
