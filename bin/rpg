@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+$e = array_map('escapeshellarg', $argv);
+array_shift($e);
+$params = implode(' ', $e);
+$robofile = dirname(__DIR__) . '/RPGTool.php';
+
+passthru(dirname(__DIR__) . "/vendor/bin/robo -f $robofile $params");

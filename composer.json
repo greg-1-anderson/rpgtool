@@ -1,0 +1,41 @@
+{
+  "name": "greg-1-anderson/RPGTool",
+  "description": "A command line tool for RPG games",
+  "keywords": [ "rpg", "random" ],
+  "homepage": "https://github.com/greg-1-anderson",
+  "license": "MIT",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=5.5.9",
+    "consolidation/robo": "^1.0.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "RPG\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "RPG\\": "tests/src/"
+    }
+  },
+  "bin": [
+    "bin/rpg"
+  ],
+  "scripts": {
+      "cbf": "phpcbf --standard=PSR2 -n src",
+      "cs": "phpcs --standard=PSR2 --severity=1 -n src",
+      "phpunit": "SHELL_INTERACTIVE=true phpunit --colors=always  -c tests/config/phpunit.xml.dist",
+      "test": "set -ex ; composer cs ; composer phpunit"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.0",
+    "squizlabs/php_codesniffer": "^2.7",
+    "satooshi/php-coveralls": "^1.0"
+  },
+  "extra": {
+    "branch-alias": {
+        "dev-master": "1.x-dev"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+language: php
+
+branches:
+  # Only test the master branch and semantic version tags.
+  only:
+    - master
+    - /^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+.*$/
+
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+sudo: false
+
+script:
+  - composer cs
+  - composer phpunit
+
+after_success:
+    - if [ $(phpenv version-name) = "7.0" ]; then composer coveralls; fi
+
+cache:
+  directories:
+    - $HOME/.cache/composer
+    - $HOME/.composer/cache
