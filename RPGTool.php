@@ -9,15 +9,21 @@ use RPG\Generators\Attribute\MontyGenerator;
 use RPG\Generators\Attribute\SimpleGenerator;
 use RPG\Random\DiceFactory;
 use RPG\Random\Random;
+use RPG\Generators\Attribute\Method\GeneratorMethodFactory;
 
 class RPGTool
 {
+    protected $random;
+    protected $dice;
+    protected $generatorMethod;
     protected $generator;
 
     public function __construct()
     {
-        $this->dice = new DiceFactory(new Random());
-        $this->generator = new Generator($this->dice);
+        $this->random = new Random();
+        $this->dice = new DiceFactory($this->random);
+        $this->generatorMethod = new GeneratorMethodFactory($this->dice);
+        $this->generator = new Generator($this->generatorMethod);
     }
 
     /**

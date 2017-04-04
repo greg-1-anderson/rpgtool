@@ -10,32 +10,35 @@ use RPG\Generators\Attribute\Method\SimpleGenerator;
 use RPG\Random\DiceInterface;
 use RPG\Random\DiceFactoryInterface;
 
+use RPG\Generators\Attribute\Method\GeneratorMethodFactory;
+use RPG\Generators\Attribute\Method\GeneratorMethodFactoryInterface;
+
 /**
  * A class full of factory methods for instantiating character attribute
  * generators.
  */
 class Generator
 {
-    protected $dice;
+    /** var GeneratorMethodFactoryInterface */
+    protected $generatorMethod;
 
-    public function __construct(DiceFactoryInterface $dice)
+    public function __construct(GeneratorMethodFactory $generatorMethod)
     {
-        $this->dice = $dice;
+        $this->generatorMethod = $generatorMethod;
     }
 
     public function create($generatorDescription = 'basic', $archetypeName = '')
     {
-        $generatorMethod = [$this, $generatorDescription];
         $archetypeMethod = [Archetypes::class, $archetypeName];
-        if (!is_callable($generatorMethod) && empty($archetypeName)) {
-            $generatorMethod = [$this, 'basic'];
+        if (!$this->generatorMethod->has($generatorDescription) && empty($archetypeName)) {
             $archetypeMethod = [Archetypes::class, $generatorDescription];
+            $generatorDescription = 'basic';
         }
         if (!empty($archetypeMethod[1]) && !is_callable($archetypeMethod)) {
             throw new \Exception('Unknown character generation method: ' . $generatorDescription . ' ' . $archetypeName);
         }
 
-        $generator = $generatorMethod();
+        $generator = $this->generatorMethod->get($generatorDescription);
         if (!empty($archetypeMethod[1])) {
             $archetype = $archetypeMethod();
             if (!$generator instanceof OrderedRollsInterface) {
@@ -44,69 +47,5 @@ class Generator
             $generator->archetype($archetype);
         }
         return $generator;
-    }
-
-    public function basic()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(3)
-          ->best(3);
-        return new BestRollsOrderedGenerator($dice, 6);
-    }
-
-    public function inept()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(2)
-          ->modifier(1);
-        return new BestRollsOrderedGenerator($dice, 6);
-    }
-
-    public function average()
-    {
-        $dice = $this->dice->create()
-          ->sides(4)
-          ->number(3)
-          ->modifier(3);
-        return new BestRollsOrderedGenerator($dice, 6);
-    }
-
-    protected function heroic()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(4)
-          ->best(3);
-        return new BestRollsOrderedGenerator($dice, 12);
-    }
-
-    protected function incredible()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(1)
-          ->modifier(12);
-        return new BestRollsOrderedGenerator($dice, 6);
-    }
-
-    protected function monty()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(1)
-          ->modifier(12);
-        return new BestRollsOrderedGenerator($dice, 8);
-    }
-
-    protected function random()
-    {
-        $dice = $this->dice->create()
-          ->sides(6)
-          ->number(6)
-          ->best(3);
-
-        return new SimpleGenerator($dice);
     }
 }
