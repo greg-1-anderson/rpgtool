@@ -10,6 +10,8 @@ use RPG\Generators\Attribute\SimpleGenerator;
 use RPG\Random\DiceFactory;
 use RPG\Random\Random;
 use RPG\Generators\Attribute\Method\GeneratorMethodFactory;
+use RPG\Generators\Attribute\Archetype\ArchetypesFactory;
+use RPG\Generators\Attribute\Archetype\ArchetypesFactoryInterface;
 
 class RPGTool
 {
@@ -17,13 +19,15 @@ class RPGTool
     protected $dice;
     protected $generatorMethod;
     protected $generator;
+    protected $archetypeFactory;
 
     public function __construct()
     {
         $this->random = new Random();
         $this->dice = new DiceFactory($this->random);
         $this->generatorMethod = new GeneratorMethodFactory($this->dice);
-        $this->generator = new Generator($this->generatorMethod);
+        $this->archetypeFactory = new ArchetypesFactory();
+        $this->generator = new Generator($this->generatorMethod, $this->archetypeFactory);
     }
 
     /**

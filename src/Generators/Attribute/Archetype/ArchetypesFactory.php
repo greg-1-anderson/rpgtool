@@ -3,6 +3,7 @@
 namespace RPG\Generators\Attribute\Archetype;
 
 use RPG\Attributes\Attribute;
+use RPG\Generators\Attribute\FactoryTrait;
 
 /**
  * Archetypes describe certain combinations of attributes.  The first
@@ -12,12 +13,14 @@ use RPG\Attributes\Attribute;
  *
  * Any attribute not named is ordered randomly.
  */
-class Archetypes
+class ArchetypesFactory implements ArchetypesFactoryInterface
 {
+    use FactoryTrait;
+
     /**
      * Strong and dumb.
      */
-    static public function brick()
+    public function brick()
     {
         return new AttributeArchetype(
             [
@@ -36,7 +39,7 @@ class Archetypes
     /**
      * Strong and lithe.
      */
-    static public function hero()
+    public function hero()
     {
         return new AttributeArchetype(
             [
@@ -52,7 +55,7 @@ class Archetypes
     /**
      * Smart, but not very strong.
      */
-    static public function genius()
+    public function genius()
     {
         return new AttributeArchetype(
             [
@@ -67,7 +70,7 @@ class Archetypes
     /**
      * Knowledgable about many things.
      */
-    static public function scholar()
+    public function scholar()
     {
         return new AttributeArchetype(
             [
@@ -83,7 +86,7 @@ class Archetypes
     /**
      * Devout and prepared.
      */
-    static public function crusader()
+    public function crusader()
     {
         return new AttributeArchetype(
             [
@@ -102,7 +105,7 @@ class Archetypes
     /**
      * Tough and streetwise.
      */
-    static public function rogue()
+    public function rogue()
     {
         return new AttributeArchetype(
             [
@@ -118,7 +121,7 @@ class Archetypes
     /**
      * Quick, persuasive and smart, but not necessarily prudent.
      */
-    static public function fox()
+    public function fox()
     {
         return new AttributeArchetype(
             [
@@ -135,7 +138,7 @@ class Archetypes
     /**
      * Hardy, strong and slow-moving.
      */
-    static public function ox()
+    public function ox()
     {
         return new AttributeArchetype(
             [
@@ -151,7 +154,7 @@ class Archetypes
     /**
      * Convincing and smart.
      */
-    static public function con()
+    public function con()
     {
         return new AttributeArchetype(
             [
@@ -169,7 +172,7 @@ class Archetypes
      * Whether leading a holy war or running a protection racket, has
      * brawn to back up arguments with action.
      */
-    static public function persuader()
+    public function persuader()
     {
         return new AttributeArchetype(
             [

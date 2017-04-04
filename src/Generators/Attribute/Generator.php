@@ -12,6 +12,7 @@ use RPG\Random\DiceFactoryInterface;
 
 use RPG\Generators\Attribute\Method\GeneratorMethodFactory;
 use RPG\Generators\Attribute\Method\GeneratorMethodFactoryInterface;
+use RPG\Generators\Attribute\Archetype\ArchetypesFactoryInterface;
 
 /**
  * A class full of factory methods for instantiating character attribute
@@ -22,28 +23,33 @@ class Generator
     /** var GeneratorMethodFactoryInterface */
     protected $generatorMethod;
 
-    public function __construct(GeneratorMethodFactory $generatorMethod)
+    /** var ArchetypesFactoryInterface */
+    protected $archetypeFactory;
+
+    public function __construct(GeneratorMethodFactory $generatorMethod, ArchetypesFactoryInterface $archetypeFactory)
     {
         $this->generatorMethod = $generatorMethod;
+        $this->archetypeFactory = $archetypeFactory;
     }
 
-    public function create($generatorDescription = 'basic', $archetypeName = '')
+    public function create($generatorDescription = 'basic', $archetypeDescription = '')
     {
-        $archetypeMethod = [Archetypes::class, $archetypeName];
-        if (!$this->generatorMethod->has($generatorDescription) && empty($archetypeName)) {
-            $archetypeMethod = [Archetypes::class, $generatorDescription];
-            $generatorDescription = 'basic';
-        }
-        if (!empty($archetypeMethod[1]) && !is_callable($archetypeMethod)) {
-            throw new \Exception('Unknown character generation method: ' . $generatorDescription . ' ' . $archetypeName);
+        $generatorName = $generatorDescription;
+        $archetypeName = $archetypeDescription;
+        if (!$this->generatorMethod->has($generatorName) && empty($archetypeName)) {
+            $generatorName = 'basic';
         }
 
-        $generator = $this->generatorMethod->get($generatorDescription);
-        if (!empty($archetypeMethod[1])) {
-            $archetype = $archetypeMethod();
+        if (!empty($archetypeName) && !$this->archetypeFactory->has($archetypeName)) {
+            throw new \Exception('Unknown character generation method: ' . $generatorDescription . ' ' . $archetypeDescription);
+        }
+
+        $generator = $this->generatorMethod->get($generatorName);
+        if (!empty($archetypeName)) {
             if (!$generator instanceof OrderedRollsInterface) {
-                throw new \Exception("The $generatorDescription generator cannot be used with an archetype (e.g. $archetypeName).");
+                throw new \Exception("The $generatorDescription generator cannot be used with an archetype (e.g. $archetypeDescription).");
             }
+            $archetype = $this->archetypeFactory->get($archetypeName);
             $generator->archetype($archetype);
         }
         return $generator;

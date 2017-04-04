@@ -3,35 +3,18 @@
 namespace RPG\Generators\Attribute\Method;
 
 use RPG\Random\DiceFactoryInterface;
+use RPG\Generators\Attribute\FactoryTrait;
 
 class GeneratorMethodFactory implements GeneratorMethodFactoryInterface
 {
+    use FactoryTrait;
+
     /** var DiceFactoryInterface */
     protected $dice;
 
     public function __construct(DiceFactoryInterface $dice)
     {
         $this->dice = $dice;
-    }
-
-    /**
-     * Get a named attribute generator
-     */
-    public function get($name)
-    {
-        $methodFunction = $this->getGeneratorMethod($name);
-        return $methodFunction();
-    }
-
-    public function has($name)
-    {
-        $methodFunction = $this->getGeneratorMethod($name);
-        return is_callable($methodFunction);
-    }
-
-    protected function getGeneratorMethod($name)
-    {
-        return [$this, $name];
     }
 
     public function basic()
