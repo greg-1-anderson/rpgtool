@@ -76,7 +76,7 @@ class RPGTool
     public function gen($generatorDescription = 'basic', $archetypeName = '')
     {
         $generator = $this->generator->create($generatorDescription, $archetypeName);
-        $attributes = Attributes::create($generator);
+        $attributes = $generator->attributes();
 
         return $attributes->attributeDescriptions();
     }

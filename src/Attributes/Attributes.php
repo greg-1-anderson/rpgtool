@@ -8,20 +8,9 @@ class Attributes
 {
     protected $attributes = [];
 
-    public static function create(AttributeGeneratorInterface $generator)
+    public function __construct($attributes)
     {
-        $attributes = new self();
-
-        foreach (static::attributeNames() as $id => $name) {
-            $attributes->assignAttribute($id, $name, $generator->get($id));
-        }
-
-        return $attributes;
-    }
-
-    protected function assignAttribute($id, $name, $value)
-    {
-        $this->attributes[$id] = new Attribute($name, $value);
+        $this->attributes = $attributes;
     }
 
     public static function attributeNames()
