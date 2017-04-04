@@ -1,6 +1,6 @@
 <?php
 
-namespace RPG\Attributes;
+namespace RPG\Generators\Attribute\Archetype;
 
 interface AttributeArchetypeInterface
 {

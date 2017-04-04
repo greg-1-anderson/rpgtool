@@ -1,6 +1,6 @@
 <?php
 
-namespace RPG\Generators\Attribute;
+namespace RPG\Generators\Attribute\Method;
 
 use RPG\Random\DiceInterface;
 

@@ -1,6 +1,8 @@
 <?php
 
-namespace RPG\Attributes;
+namespace RPG\Generators\Attribute\Archetype;
+
+use RPG\Attributes\Attribute;
 
 /**
  * Archetypes describe certain combinations of attributes.  The first

@@ -1,10 +1,10 @@
 <?php
 
-namespace RPG\Generators\Attribute;
+namespace RPG\Generators\Attribute\Method;
 
 use RPG\Attributes\Attributes;
 use RPG\Random\DiceInterface;
-use RPG\Attributes\AttributeArchetypeInterface;
+use RPG\Generators\Attribute\Archetype\AttributeArchetypeInterface;
 
 /**
  * Provide methods that allows the rolls to be ordered by

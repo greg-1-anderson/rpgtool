@@ -1,6 +1,6 @@
 <?php
 
-namespace RPG\Generators\Attribute;
+namespace RPG\Generators\Attribute\Method;
 
 use RPG\Random\DiceInterface;
 
@@ -10,8 +10,4 @@ use RPG\Random\DiceInterface;
  */
 class SimpleGenerator extends DiceGenerator
 {
-    public static function create(DiceInterface $dice)
-    {
-        return new self($dice);
-    }
 }

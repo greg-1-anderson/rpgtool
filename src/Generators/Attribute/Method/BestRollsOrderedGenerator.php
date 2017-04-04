@@ -1,10 +1,9 @@
 <?php
 
-namespace RPG\Generators\Attribute;
+namespace RPG\Generators\Attribute\Method;
 
-use RPG\Attributes\AttributeArchetypeInterface;
+use RPG\Generators\Attribute\Archetype\AttributeArchetypeInterface;
 use RPG\Attributes\Attributes;
-use RPG\Generators\Attribute\OrderedRollsInterface;
 use RPG\Random\DiceInterface;
 
 /**
@@ -23,11 +22,6 @@ class BestRollsOrderedGenerator extends DiceGenerator implements OrderedRollsInt
         $this->number = $number;
         $this->rolls = [];
         parent::__construct($dice);
-    }
-
-    public static function create(DiceInterface $dice, $number)
-    {
-        return new self($dice, $number);
     }
 
     public function get($id)

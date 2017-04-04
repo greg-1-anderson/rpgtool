@@ -3,8 +3,10 @@
 namespace RPG\Generators\Attribute;
 
 use RPG\Random\Dice;
-use RPG\Attributes\Archetypes;
-use RPG\Generators\Attribute\OrderedRollsInterface;
+use RPG\Generators\Attribute\Archetype\Archetypes;
+use RPG\Generators\Attribute\Method\OrderedRollsInterface;
+use RPG\Generators\Attribute\Method\BestRollsOrderedGenerator;
+use RPG\Generators\Attribute\Method\SimpleGenerator;
 use RPG\Random\DiceInterface;
 use RPG\Random\DiceFactoryInterface;
 
@@ -50,7 +52,7 @@ class Generator
           ->sides(6)
           ->number(3)
           ->best(3);
-        return BestRollsOrderedGenerator::create($dice, 6);
+        return new BestRollsOrderedGenerator($dice, 6);
     }
 
     public function inept()
@@ -59,7 +61,7 @@ class Generator
           ->sides(6)
           ->number(2)
           ->modifier(1);
-        return BestRollsOrderedGenerator::create($dice, 6);
+        return new BestRollsOrderedGenerator($dice, 6);
     }
 
     public function average()
@@ -68,7 +70,7 @@ class Generator
           ->sides(4)
           ->number(3)
           ->modifier(3);
-        return BestRollsOrderedGenerator::create($dice, 6);
+        return new BestRollsOrderedGenerator($dice, 6);
     }
 
     protected function heroic()
@@ -77,7 +79,7 @@ class Generator
           ->sides(6)
           ->number(4)
           ->best(3);
-        return BestRollsOrderedGenerator::create($dice, 12);
+        return new BestRollsOrderedGenerator($dice, 12);
     }
 
     protected function incredible()
@@ -86,7 +88,7 @@ class Generator
           ->sides(6)
           ->number(1)
           ->modifier(12);
-        return BestRollsOrderedGenerator::create($dice, 6);
+        return new BestRollsOrderedGenerator($dice, 6);
     }
 
     protected function monty()
@@ -95,7 +97,7 @@ class Generator
           ->sides(6)
           ->number(1)
           ->modifier(12);
-        return BestRollsOrderedGenerator::create($dice, 8);
+        return new BestRollsOrderedGenerator($dice, 8);
     }
 
     protected function random()
@@ -105,6 +107,6 @@ class Generator
           ->number(6)
           ->best(3);
 
-        return SimpleGenerator::create($dice);
+        return new SimpleGenerator($dice);
     }
 }

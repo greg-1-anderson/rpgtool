@@ -2,7 +2,7 @@
 
 namespace RPG\Attributes;
 
-use RPG\Generators\Attribute\AttributeGeneratorInterface;
+use RPG\Generators\Attribute\Method\AttributeGeneratorInterface;
 
 class Attributes
 {
