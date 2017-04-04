@@ -2,23 +2,31 @@
 
 namespace RPG\Generators\Attribute;
 
-use RPG\Random\BestDice;
+use RPG\Random\Dice;
 use RPG\Attributes\Archetypes;
 use RPG\Generators\Attribute\OrderedRollsInterface;
 use RPG\Random\DiceInterface;
+use RPG\Random\DiceFactoryInterface;
 
 /**
- * A class full of static factory methods for instantiating character attribute
+ * A class full of factory methods for instantiating character attribute
  * generators.
  */
 class Generator
 {
-    public static function create($generatorDescription = 'basic', $archetypeName = '')
+    protected $dice;
+
+    public function __construct(DiceFactoryInterface $dice)
     {
-        $generatorMethod = [Generator::class, $generatorDescription];
+        $this->dice = $dice;
+    }
+
+    public function create($generatorDescription = 'basic', $archetypeName = '')
+    {
+        $generatorMethod = [$this, $generatorDescription];
         $archetypeMethod = [Archetypes::class, $archetypeName];
         if (!is_callable($generatorMethod) && empty($archetypeName)) {
-            $generatorMethod = [Generator::class, 'basic'];
+            $generatorMethod = [$this, 'basic'];
             $archetypeMethod = [Archetypes::class, $generatorDescription];
         }
         if (!empty($archetypeMethod[1]) && !is_callable($archetypeMethod)) {
@@ -36,63 +44,63 @@ class Generator
         return $generator;
     }
 
-    public static function basic()
+    public function basic()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(3)
           ->best(3);
         return BestRollsOrderedGenerator::create($dice, 6);
     }
 
-    public static function inept()
+    public function inept()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(2)
           ->modifier(1);
         return BestRollsOrderedGenerator::create($dice, 6);
     }
 
-    public static function average()
+    public function average()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(4)
           ->number(3)
           ->modifier(3);
         return BestRollsOrderedGenerator::create($dice, 6);
     }
 
-    protected static function heroic()
+    protected function heroic()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(4)
           ->best(3);
         return BestRollsOrderedGenerator::create($dice, 12);
     }
 
-    protected static function incredible()
+    protected function incredible()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(1)
           ->modifier(12);
         return BestRollsOrderedGenerator::create($dice, 6);
     }
 
-    protected static function monty()
+    protected function monty()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(1)
           ->modifier(12);
         return BestRollsOrderedGenerator::create($dice, 8);
     }
 
-    protected static function random()
+    protected function random()
     {
-        $dice = BestDice::create()
+        $dice = $this->dice->create()
           ->sides(6)
           ->number(6)
           ->best(3);

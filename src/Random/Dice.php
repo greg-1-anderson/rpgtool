@@ -6,49 +6,23 @@ namespace RPG\Random;
  * Generate a number from one to N, where N is the "sides" of the dice.
  * Multiple dice can be rolled by stipulating the number of dice.
  * A modifier can also be provided if desired.
- *
- * Example: 3d6+1
- *
- * $dice = Dice::create()
- *   ->number(3)
- *   ->sides(6)
- *   ->modifier(1);
- *  $result = $dice->roll();
- *
- * Equivalently:
- * $dice = Dice::create()
- *   ->describe('3d6+1')
- *  $result = $dice->roll();
- *
  */
 class Dice implements DiceInterface
 {
+    /** var RandomInterface */
+    protected $random;
     protected $sides;
     protected $number;
     protected $modifier;
+    protected $keep;
 
-    public function __construct()
+    public function __construct(RandomInterface $random)
     {
+        $this->random = $random;
         $this->sides = 20;
         $this->number = 1;
         $this->modifier = 0;
-    }
-
-    public static function create()
-    {
-        return new self();
-    }
-
-    public function describe($numberSidesModifier)
-    {
-        if (!preg_match('/^([0-9]*)d([0-9]+)(\+([0-9]+))*$/', $numberSidesModifier, $matches)) {
-            throw new \Exception('Formatting error: use 1d4+1');
-        }
-        $matches[] = '+0';
-        $this->number($matches[1] === '' ? 1 : $matches[1]);
-        $this->sides($matches[2]);
-        $this->modifier((int)$matches[3]);
-        return $this;
+        $this->keep = 0;
     }
 
     public function sides($sides)
@@ -69,13 +43,29 @@ class Dice implements DiceInterface
         return $this;
     }
 
+    public function best($keep)
+    {
+        $this->keep = $keep;
+        return $this;
+    }
+
+    protected function keepBest($result)
+    {
+        if (!$this->keep) {
+            return $result;
+        }
+        rsort($result);
+        return array_slice($result, 0, $this->keep);
+    }
+
     protected function get()
     {
         $result = [];
         foreach (range(1, $this->number) as $i) {
-            $result[] = rand(1, $this->sides);
+            $result[] = $this->random->random(1, $this->sides);
         }
-        return $result;
+
+        return $this->keepBest($result);
     }
 
     public function roll()

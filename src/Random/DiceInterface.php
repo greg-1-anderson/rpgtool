@@ -4,9 +4,12 @@ namespace RPG\Random;
 
 /**
  * Generate a random number. The characteristics of the number
- * depends on the implementation.
+ * depends on how the object is initialized.
  */
-interface DiceInterface
+interface DiceInterface extends RollInterface
 {
-    public function roll();
+    public function sides($sides);
+    public function number($number);
+    public function modifier($modifier);
+    public function best($keep);
 }

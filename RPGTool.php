@@ -1,24 +1,31 @@
 <?php
 
 use Consolidation\OutputFormatters\StructuredData\PropertyList;
-use RPG\Attributes\Attributes;
-use RPG\Generators\Attribute\SimpleGenerator;
-use RPG\Generators\Attribute\BestRollsOrderedGenerator;
-use RPG\Generators\Attribute\MontyGenerator;
-use RPG\Generators\Attribute\Generator;
-use RPG\Random\Dice;
-use RPG\Random\BestDice;
 use RPG\Attributes\Archetypes;
+use RPG\Attributes\Attributes;
+use RPG\Generators\Attribute\BestRollsOrderedGenerator;
+use RPG\Generators\Attribute\Generator;
+use RPG\Generators\Attribute\MontyGenerator;
+use RPG\Generators\Attribute\SimpleGenerator;
+use RPG\Random\DiceFactory;
+use RPG\Random\Random;
 
 class RPGTool
 {
+    protected $generator;
+
+    public function __construct()
+    {
+        $this->dice = new DiceFactory(new Random());
+        $this->generator = new Generator($this->dice);
+    }
+
     /**
      * Roll the specified number of dice (e.g. '3d6+1') a number of times.
      */
     public function roll($diceDescription = '1d20', $times = 1)
     {
-        $dice = Dice::create()
-          ->describe($diceDescription);
+        $dice = $this->dice->create($diceDescription);
         $result = [];
         foreach (range(1, $times) as $i) {
             $result[] = $dice->roll();
@@ -33,7 +40,7 @@ class RPGTool
      */
     public function attack($thac0, $times = 1)
     {
-        $dice = Dice::create()
+        $dice = $this->dice->create()
           ->sides(20);
 
         $result = [];
@@ -58,7 +65,7 @@ class RPGTool
      */
     public function gen($generatorDescription = 'basic', $archetypeName = '')
     {
-        $generator = Generator::create($generatorDescription, $archetypeName);
+        $generator = $this->generator->create($generatorDescription, $archetypeName);
         $attributes = Attributes::create($generator);
 
         return $attributes->attributeDescriptions();
