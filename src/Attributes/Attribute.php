@@ -13,21 +13,41 @@ class Attribute implements AttributeInterface
         $this->value = $value;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function another($value)
+    {
+        return new self($this->name, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function name()
     {
         return $this->name;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function value()
     {
         return $this->value;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function describe()
     {
         return $this->value();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setValue($value)
     {
         $this->value = $value;

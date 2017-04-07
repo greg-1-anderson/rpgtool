@@ -40,4 +40,52 @@ class Attributes
 
         return $result;
     }
+
+    /**
+     * Alter the attribute values stored in this object. Return a new
+     * object containing the results.
+     *
+     * @param AttributeAdjustmentInterface[] $alterations
+     * @return Attributes
+     */
+    public function alter($alterations)
+    {
+        $attributes = $this->attributes;
+
+        foreach ($this->attributes as $id => $attribute) {
+            foreach ($alterations as $alteration) {
+                $attributes[$id] = $alteration->alterAttribute($id, $attributes[$id]);
+            }
+        }
+
+        return new self($attributes);
+    }
+
+    /**
+     * Check to see if the attributes are valid per the provided constraints.
+     */
+    public function valid($constraints)
+    {
+        foreach ($this->attributes as $id => $attribute) {
+            foreach ($constraints as $constraint) {
+                if (!$constraint->meetsMinimum($id, $attribute)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function constrainToLimit($constraints)
+    {
+        $attributes = $this->attributes;
+
+        foreach ($this->attributes as $id => $attribute) {
+            foreach ($constraints as $constraint) {
+                $attributes[$id] = $constraint->constrainToLimit($id, $attributes[$id]);
+            }
+        }
+
+        return new self($attributes);
+    }
 }

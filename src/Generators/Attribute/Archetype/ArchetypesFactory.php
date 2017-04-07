@@ -3,7 +3,7 @@
 namespace RPG\Generators\Attribute\Archetype;
 
 use RPG\Attributes\Attribute;
-use RPG\Generators\Attribute\FactoryTrait;
+use RPG\Framework\FactoryTrait;
 
 /**
  * Archetypes describe certain combinations of attributes.  The first
@@ -16,6 +16,25 @@ use RPG\Generators\Attribute\FactoryTrait;
 class ArchetypesFactory implements ArchetypesFactoryInterface
 {
     use FactoryTrait;
+
+    /**
+     * Return a list of all archetypes.
+     */
+    public function all()
+    {
+        return [
+            'brick',
+            'hero',
+            'genius',
+            'scholar',
+            'crusader',
+            'rogue',
+            'fox',
+            'ox',
+            'con',
+            'persuader',
+        ];
+    }
 
     /**
      * Strong and dumb.

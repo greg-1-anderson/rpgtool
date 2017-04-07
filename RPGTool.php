@@ -12,6 +12,10 @@ use RPG\Random\Random;
 use RPG\Generators\Attribute\Method\GeneratorMethodFactory;
 use RPG\Generators\Attribute\Archetype\ArchetypesFactory;
 use RPG\Generators\Attribute\Archetype\ArchetypesFactoryInterface;
+use RPG\Generators\Races\RaceFactory;
+
+use RPG\Attributes\AttributeAdjustmentInterface;
+use RPG\Attributes\AttributeLimitsInterface;
 
 class RPGTool
 {
@@ -20,6 +24,7 @@ class RPGTool
     protected $generatorMethod;
     protected $generator;
     protected $archetypeFactory;
+    protected $raceFactory;
 
     public function __construct()
     {
@@ -28,6 +33,7 @@ class RPGTool
         $this->generatorMethod = new GeneratorMethodFactory($this->dice);
         $this->archetypeFactory = new ArchetypesFactory();
         $this->generator = new Generator($this->generatorMethod, $this->archetypeFactory);
+        $this->raceFactory = new RaceFactory();
     }
 
     /**
@@ -73,10 +79,26 @@ class RPGTool
      *
      * @return PropertyList
      */
-    public function gen($generatorDescription = 'basic', $archetypeName = '')
-    {
+    public function gen(
+        $generatorDescription = 'basic',
+        $archetypeName = '',
+        $options = [
+            'race' => 'human'
+        ]
+    ) {
         $generator = $this->generator->create($generatorDescription, $archetypeName);
         $attributes = $generator->attributes();
+
+        $race = $this->raceFactory->get($options['race']);
+
+        $racialAdjustments = $race->getBehaviors(AttributeAdjustmentInterface::class);
+        $attributes = $attributes->alter($racialAdjustments);
+
+        $racialLimits = $race->getBehaviors(AttributeLimitsInterface::class);
+        if (!$attributes->valid($racialLimits)) {
+            throw new Exception('The generated character does not have high enough stats to be a ' . $options['race']);
+        }
+        $attributes = $attributes->constrainToLimit($racialLimits);
 
         return $attributes->attributeDescriptions();
     }

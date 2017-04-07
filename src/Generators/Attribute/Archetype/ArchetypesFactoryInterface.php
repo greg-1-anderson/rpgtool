@@ -1,12 +1,8 @@
 <?php
 
 namespace RPG\Generators\Attribute\Archetype;
+use RPG\Framework\FactoryInterface;
 
-interface ArchetypesFactoryInterface
+interface ArchetypesFactoryInterface extends FactoryInterface
 {
-    /**
-     * Get a named archetype
-     */
-    public function get($name);
-    public function has($name);
 }

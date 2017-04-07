@@ -3,7 +3,7 @@
 namespace RPG\Generators\Attribute\Method;
 
 use RPG\Random\DiceFactoryInterface;
-use RPG\Generators\Attribute\FactoryTrait;
+use RPG\Framework\FactoryTrait;
 
 class GeneratorMethodFactory implements GeneratorMethodFactoryInterface
 {
@@ -15,6 +15,22 @@ class GeneratorMethodFactory implements GeneratorMethodFactoryInterface
     public function __construct(DiceFactoryInterface $dice)
     {
         $this->dice = $dice;
+    }
+
+    /**
+     * Return a list of all generation methods.
+     */
+    public function all()
+    {
+        return [
+            'basic',
+            'inept',
+            'average',
+            'heroic',
+            'incredible',
+            'monty',
+            'random',
+        ];
     }
 
     public function basic()

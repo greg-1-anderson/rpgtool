@@ -1,12 +1,8 @@
 <?php
 
 namespace RPG\Generators\Attribute\Method;
+use RPG\Framework\FactoryInterface;
 
-interface GeneratorMethodFactoryInterface
+interface GeneratorMethodFactoryInterface extends FactoryInterface
 {
-    /**
-     * Get a named attribute generator
-     */
-    public function get($name);
-    public function has($name);
 }
